@@ -7,7 +7,7 @@ import { authApi } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, BookOpen, List, Quote, Image, User, FileText,
-  Upload, Settings, BarChart2, LogOut, Menu, X, ChevronRight
+  Upload, Settings, BarChart2, LogOut, Menu, X, ChevronRight, MessageSquarePlus
 } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 
@@ -22,6 +22,7 @@ const NAV_ITEMS = [
   { href: '/dashboard/books', label: 'Books', icon: BookOpen },
   { href: '/dashboard/chapters', label: 'Chapters', icon: List },
   { href: '/dashboard/quotes', label: 'Quotes', icon: Quote },
+  { href: '/dashboard/suggestions', label: 'Suggestions', icon: MessageSquarePlus },
   { href: '/dashboard/gallery', label: 'Gallery', icon: Image },
   { href: '/dashboard/characters', label: 'Characters', icon: User },
   { href: '/dashboard/blog', label: 'Blog', icon: FileText },

@@ -75,7 +75,9 @@ app.use('/api/announcements', announcementsRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/upload', uploadRoutes);
-app.use('/api/analytics', analyticsRoutes);
+import suggestionsRoutes from './routes/suggestions';
+
+app.use('/api/suggestions', suggestionsRoutes);
 
 // ─── 404 Handler ──────────────────────────────────────────────────────────────
 app.use((_req, res) => {

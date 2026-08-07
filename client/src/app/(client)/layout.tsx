@@ -3,6 +3,8 @@ import { Footer } from '@/components/client/Footer';
 import { ReadingProgress } from '@/components/ui/ReadingProgress';
 import { Toaster } from 'react-hot-toast';
 
+import { AnnouncementBar } from '@/components/client/AnnouncementBar';
+
 export default function ClientLayout({
   children,
 }: {
@@ -10,6 +12,7 @@ export default function ClientLayout({
 }) {
   return (
     <>
+      <AnnouncementBar />
       <ReadingProgress />
       <Navbar />
       <main>{children}</main>

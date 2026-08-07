@@ -129,6 +129,29 @@ export default function AdminAnalyticsPage() {
               </FadeIn>
             )}
           </div>
+
+          {/* How Views Are Calculated Explanation Box */}
+          <FadeIn delay={0.3}>
+            <div className="card p-6 border border-[var(--color-gold-dim)]/30 bg-white/[0.02]">
+              <h3 className="font-display text-base font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--color-gold)' }}>
+                ℹ️ How Analytics & Page Views Are Calculated
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs leading-relaxed" style={{ color: 'var(--color-mist-light)' }}>
+                <div className="p-3 rounded bg-white/5 space-y-1">
+                  <p className="font-semibold text-sm text-[var(--color-parchment)]">1. Real-Time Tracking</p>
+                  <p>Every time a reader visits any page (`/books/[slug]`, `/news/[slug]`, or `/`), a secure `POST /api/analytics/track` hit is recorded in Supabase.</p>
+                </div>
+                <div className="p-3 rounded bg-white/5 space-y-1">
+                  <p className="font-semibold text-sm text-[var(--color-parchment)]">2. 30-Day Rolling Window</p>
+                  <p>Monthly views sum all valid page hits recorded in the last 30 calendar days (`viewed_at &gt;= NOW() - INTERVAL &apos;30 days&apos;`).</p>
+                </div>
+                <div className="p-3 rounded bg-white/5 space-y-1">
+                  <p className="font-semibold text-sm text-[var(--color-parchment)]">3. Path &amp; Book Popularity</p>
+                  <p>Top Pages group page views by URL path to measure which books, chapters, and news posts are attracting the highest reader traffic.</p>
+                </div>
+              </div>
+            </div>
+          </FadeIn>
         </div>
       )}
     </div>

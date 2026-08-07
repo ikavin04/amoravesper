@@ -142,7 +142,7 @@ function QuoteFormModal({ quote, books, onClose, onSave }: {
     type: quote?.type || 'quote',
     background_image_url: quote?.background_image_url || '',
     is_pinned: quote?.is_pinned || false,
-    is_published: quote?.is_published || false,
+    is_published: quote ? quote.is_published : true,
   });
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);

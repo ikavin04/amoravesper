@@ -30,10 +30,10 @@ export function Navbar() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: [0.21, 0.47, 0.32, 0.98] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
             ? 'bg-[var(--color-ink)]/95 backdrop-blur-xl border-b border-white/5 py-4'
-            : 'bg-transparent py-6'
+            : 'bg-[var(--color-ink)]/80 backdrop-blur-md py-5 border-b border-white/5'
         }`}
       >
         <div className="container flex items-center justify-between">

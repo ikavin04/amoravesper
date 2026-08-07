@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { settingsApi } from '@/lib/api';
 import { FadeIn } from '@/components/ui/FadeIn';
+import { SuggestionBox } from '@/components/client/SuggestionBox';
 import { Instagram, Mail, ExternalLink } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -103,6 +104,12 @@ export default async function ContactPage() {
                 </a>
               </FadeIn>
             ))}
+          </div>
+
+          <div className="mt-12 max-w-3xl">
+            <FadeIn delay={0.4}>
+              <SuggestionBox />
+            </FadeIn>
           </div>
         </div>
       </section>

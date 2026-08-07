@@ -149,6 +149,21 @@ export const announcementsApi = {
     api.delete(`/api/announcements/${id}`).then(r => r.data),
 };
 
+// ─── Suggestions ──────────────────────────────────────────────────────────────
+export const suggestionsApi = {
+  submit: (data: { reader_name?: string; reader_email?: string; book_topic?: string; suggestion: string }) =>
+    api.post('/api/suggestions', data).then(r => r.data),
+
+  getAllAdmin: () =>
+    api.get('/api/suggestions/admin/all').then(r => r.data),
+
+  updateStatus: (id: string, status: string) =>
+    api.put(`/api/suggestions/${id}/status`, { status }).then(r => r.data),
+
+  delete: (id: string) =>
+    api.delete(`/api/suggestions/${id}`).then(r => r.data),
+};
+
 // ─── Settings ─────────────────────────────────────────────────────────────────
 export const settingsApi = {
   getPublic: () =>

@@ -47,16 +47,6 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* ── Announcement Banner ── */}
-      {settings.announcement_active === 'true' && settings.announcement_text && (
-        <div
-          className="py-3 px-4 text-center text-xs tracking-widest uppercase"
-          style={{ background: 'rgba(201,168,76,0.1)', borderBottom: '1px solid rgba(201,168,76,0.15)', color: 'var(--color-gold)' }}
-        >
-          {settings.announcement_text}
-        </div>
-      )}
-
       {/* ── Hero ── */}
       <HeroSection settings={settings} featuredBook={featuredBook} />
 

@@ -12,7 +12,7 @@ router.get('/', async (req: Request, res: Response) => {
       SELECT q.*, b.title as book_title, b.slug as book_slug
       FROM quotes q
       LEFT JOIN books b ON b.id = q.book_id
-      WHERE q.is_published = true
+      WHERE (q.is_published = true OR q.is_published IS NULL)
     `;
     const params: unknown[] = [];
     let idx = 1;
@@ -47,9 +47,14 @@ router.get('/random', async (_req: Request, res: Response) => {
 // GET /api/quotes/pinned — public
 router.get('/pinned', async (_req: Request, res: Response) => {
   try {
-    const result = await query(
-      'SELECT q.*, b.title as book_title FROM quotes q LEFT JOIN books b ON b.id = q.book_id WHERE q.is_pinned = true AND q.is_published = true LIMIT 1'
+    let result = await query(
+      'SELECT q.*, b.title as book_title FROM quotes q LEFT JOIN books b ON b.id = q.book_id WHERE q.is_pinned = true LIMIT 1'
     );
+    if (!result.rows[0]) {
+      result = await query(
+        'SELECT q.*, b.title as book_title FROM quotes q LEFT JOIN books b ON b.id = q.book_id ORDER BY q.is_pinned DESC, q.created_at DESC LIMIT 1'
+      );
+    }
     res.json(result.rows[0] || null);
   } catch (err) {
     console.error(err);
