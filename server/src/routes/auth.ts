@@ -50,15 +50,17 @@ router.post('/login', authLimiter, async (req: Request, res: Response) => {
 
     const token = signToken({ adminId, email: adminEmail });
 
+    const isProd = process.env.NODE_ENV === 'production';
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     res.json({
       message: 'Logged in successfully',
+      token,
       admin: { id: adminId, email: adminEmail },
     });
   } catch (err) {
@@ -69,10 +71,11 @@ router.post('/login', authLimiter, async (req: Request, res: Response) => {
 
 // POST /api/auth/logout
 router.post('/logout', (req: Request, res: Response) => {
+  const isProd = process.env.NODE_ENV === 'production';
   res.clearCookie('token', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
   });
   res.json({ message: 'Logged out' });
 });

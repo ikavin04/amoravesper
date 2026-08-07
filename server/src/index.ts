@@ -32,7 +32,18 @@ app.use(helmet({
   contentSecurityPolicy: false, // CSP managed by Next.js
 }));
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: (origin, callback) => {
+    // Allow non-browser requests (Postman, cURL) or matching origins
+    if (!origin) return callback(null, true);
+    if (
+      origin.endsWith('.vercel.app') ||
+      origin.includes('localhost') ||
+      origin === process.env.CLIENT_URL
+    ) {
+      return callback(null, true);
+    }
+    return callback(null, true); // Fallback allow for production client flexibility
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],

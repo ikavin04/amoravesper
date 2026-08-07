@@ -8,6 +8,17 @@ export const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+// Attach Authorization header if token stored in localStorage
+api.interceptors.request.use(config => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('amora_auth_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return config;
+});
+
 // ─── Books ────────────────────────────────────────────────────────────────────
 export const booksApi = {
   getAll: (params?: { genre?: string; status?: string }) =>
@@ -159,10 +170,20 @@ export const searchApi = {
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 export const authApi = {
   login: (email: string, password: string) =>
-    api.post('/api/auth/login', { email, password }).then(r => r.data),
+    api.post('/api/auth/login', { email, password }).then(r => {
+      if (r.data?.token && typeof window !== 'undefined') {
+        localStorage.setItem('amora_auth_token', r.data.token);
+      }
+      return r.data;
+    }),
 
   logout: () =>
-    api.post('/api/auth/logout').then(r => r.data),
+    api.post('/api/auth/logout').then(r => {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('amora_auth_token');
+      }
+      return r.data;
+    }),
 
   me: () =>
     api.get('/api/auth/me').then(r => r.data),
