@@ -1,5 +1,11 @@
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
+import dns from 'dns';
+
+// Force Node.js DNS resolution to prioritize IPv4 over IPv6 on environments like Render
+if (typeof dns.setDefaultResultOrder === 'function') {
+  dns.setDefaultResultOrder('ipv4first');
+}
 
 dotenv.config();
 
