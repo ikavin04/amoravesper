@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export const revalidate = 60;
 
-const GENRES = ['Fantasy', 'Dark Romance', 'Gothic', 'Thriller', 'Contemporary', 'Paranormal'];
+const GENRES = ['Smut', 'Angst', 'Yearning', 'Tension', 'Stalking', 'Romance', 'Young Adult'];
 const STATUSES = [
   { value: 'ongoing', label: 'Ongoing' },
   { value: 'completed', label: 'Completed' },

@@ -120,7 +120,7 @@ export default async function AboutPage() {
                 <div className="mb-8">
                   <p className="text-label mb-4">Favorite Genres</p>
                   <div className="flex flex-wrap gap-2">
-                    {['Dark Fantasy', 'Gothic Romance', 'Atmospheric Thriller', 'Literary Fiction', 'Paranormal'].map(genre => (
+                    {['Smut', 'Angst', 'Yearning', 'Tension', 'Stalking', 'Romance', 'Young Adult'].map(genre => (
                       <span key={genre} className="badge badge-gold">{genre}</span>
                     ))}
                   </div>

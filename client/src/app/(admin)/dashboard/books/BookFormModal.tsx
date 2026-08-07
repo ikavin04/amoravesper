@@ -15,7 +15,7 @@ interface BookFormModalProps {
   onSave: () => void;
 }
 
-const GENRES = ['Fantasy', 'Dark Romance', 'Gothic', 'Thriller', 'Contemporary', 'Paranormal', 'Literary Fiction', 'Horror', 'Mystery'];
+const GENRES = ['Smut', 'Angst', 'Yearning', 'Tension', 'Stalking', 'Romance', 'Young Adult'];
 
 export function BookFormModal({ book, onClose, onSave }: BookFormModalProps) {
   const [form, setForm] = useState({
