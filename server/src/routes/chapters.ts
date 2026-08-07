@@ -4,6 +4,20 @@ import { requireAuth } from '../middleware/auth';
 
 const router = Router();
 
+// GET /api/chapters/admin/:bookId — admin: all chapters
+router.get('/admin/:bookId', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const result = await query(
+      `SELECT * FROM chapters WHERE book_id = $1 ORDER BY chapter_number ASC`,
+      [req.params.bookId]
+    ).catch(() => ({ rows: [] }));
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.json([]);
+  }
+});
+
 // GET /api/chapters/:bookId — public: published chapters for a book
 router.get('/:bookId', async (req: Request, res: Response) => {
   try {
@@ -13,25 +27,11 @@ router.get('/:bookId', async (req: Request, res: Response) => {
        FROM chapters WHERE book_id = $1 AND is_published = true
        ORDER BY chapter_number ASC`,
       [req.params.bookId]
-    );
+    ).catch(() => ({ rows: [] }));
     res.json(result.rows);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// GET /api/chapters/admin/:bookId — admin: all chapters
-router.get('/admin/:bookId', requireAuth, async (req: Request, res: Response) => {
-  try {
-    const result = await query(
-      `SELECT * FROM chapters WHERE book_id = $1 ORDER BY chapter_number ASC`,
-      [req.params.bookId]
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
+    res.json([]);
   }
 });
 

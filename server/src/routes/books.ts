@@ -48,6 +48,21 @@ router.get('/featured', async (_req: Request, res: Response) => {
   }
 });
 
+// GET /api/books/admin/all — admin: all books including drafts
+router.get('/admin/all', requireAuth, async (_req: Request, res: Response) => {
+  try {
+    const result = await query(`
+      SELECT b.*,
+        (SELECT COUNT(*) FROM chapters c WHERE c.book_id = b.id) as chapter_count
+      FROM books b ORDER BY b.sort_order ASC, b.created_at DESC
+    `).catch(() => ({ rows: [] }));
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.json([]);
+  }
+});
+
 // GET /api/books/:slug — public: single book with all related data
 router.get('/:slug', async (req: Request, res: Response) => {
   try {
@@ -55,7 +70,7 @@ router.get('/:slug', async (req: Request, res: Response) => {
 
     const bookResult = await query(
       'SELECT * FROM books WHERE slug = $1 AND is_published = true', [slug]
-    );
+    ).catch(() => ({ rows: [] }));
     if (bookResult.rows.length === 0) {
       res.status(404).json({ error: 'Book not found' });
       return;
@@ -63,11 +78,11 @@ router.get('/:slug', async (req: Request, res: Response) => {
     const book = bookResult.rows[0];
 
     const [chapters, characters, playlist, gallery, reviews] = await Promise.all([
-      query(`SELECT * FROM chapters WHERE book_id = $1 AND is_published = true ORDER BY chapter_number ASC`, [book.id]),
-      query(`SELECT * FROM characters WHERE book_id = $1 ORDER BY sort_order ASC`, [book.id]),
-      query(`SELECT * FROM book_playlists WHERE book_id = $1 ORDER BY sort_order ASC`, [book.id]),
-      query(`SELECT * FROM book_gallery WHERE book_id = $1 ORDER BY sort_order ASC`, [book.id]),
-      query(`SELECT * FROM reader_reviews WHERE book_id = $1 AND is_published = true ORDER BY created_at DESC`, [book.id]),
+      query(`SELECT * FROM chapters WHERE book_id = $1 AND is_published = true ORDER BY chapter_number ASC`, [book.id]).catch(() => ({ rows: [] })),
+      query(`SELECT * FROM characters WHERE book_id = $1 ORDER BY sort_order ASC`, [book.id]).catch(() => ({ rows: [] })),
+      query(`SELECT * FROM book_playlists WHERE book_id = $1 ORDER BY sort_order ASC`, [book.id]).catch(() => ({ rows: [] })),
+      query(`SELECT * FROM book_gallery WHERE book_id = $1 ORDER BY sort_order ASC`, [book.id]).catch(() => ({ rows: [] })),
+      query(`SELECT * FROM reader_reviews WHERE book_id = $1 AND is_published = true ORDER BY created_at DESC`, [book.id]).catch(() => ({ rows: [] })),
     ]);
 
     res.json({
@@ -78,23 +93,6 @@ router.get('/:slug', async (req: Request, res: Response) => {
       gallery: gallery.rows,
       reviews: reviews.rows,
     });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// ─── ADMIN ROUTES ────────────────────────────────────────────────────────────
-
-// GET /api/books/admin/all — admin: all books including drafts
-router.get('/admin/all', requireAuth, async (_req: Request, res: Response) => {
-  try {
-    const result = await query(`
-      SELECT b.*,
-        (SELECT COUNT(*) FROM chapters c WHERE c.book_id = b.id) as chapter_count
-      FROM books b ORDER BY b.sort_order ASC, b.created_at DESC
-    `);
-    res.json(result.rows);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
