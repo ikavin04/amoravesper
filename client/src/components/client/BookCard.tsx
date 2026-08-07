@@ -46,19 +46,15 @@ export function BookCard({ book, index = 0 }: BookCardProps) {
             </div>
           )}
 
-          {/* Status Badge */}
-          <div className="absolute top-3 left-3">
-            <span className={`badge ${getStatusColor(book.status)}`}>
+          {/* Badges Overlay */}
+          <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 pointer-events-none z-10">
+            <span className={`badge ${getStatusColor(book.status)} shadow-md`}>
               {getStatusLabel(book.status)}
             </span>
+            {book.is_featured && (
+              <span className="badge badge-gold shadow-md">Featured</span>
+            )}
           </div>
-
-          {/* Featured Badge */}
-          {book.is_featured && (
-            <div className="absolute top-3 right-3">
-              <span className="badge badge-gold">Featured</span>
-            </div>
-          )}
 
           {/* Hover Overlay */}
           <div
