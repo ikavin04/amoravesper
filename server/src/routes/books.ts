@@ -124,13 +124,13 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
         wattpad_link, kindle_link, website_link, countdown_date || null, sort_order || 0]);
 
     res.status(201).json(result.rows[0]);
-  } catch (err: unknown) {
-    if ((err as NodeJS.ErrnoException).message?.includes('unique')) {
+  } catch (err: any) {
+    if (err.message?.includes('unique')) {
       res.status(409).json({ error: 'Slug already exists' });
       return;
     }
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
+    console.error('Book create error:', err);
+    res.status(500).json({ error: err.message || 'Database error creating book' });
   }
 });
 

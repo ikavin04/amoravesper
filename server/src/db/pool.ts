@@ -25,7 +25,7 @@ export const query = async (text: string, params?: unknown[]) => {
   try {
     return await pool.query(text, params);
   } catch (err: any) {
-    console.error('⚠️ DB Query warning:', err.message || err);
-    return { rows: [], rowCount: 0 };
+    console.error('⚠️ DB Query Error:', err.message || err);
+    throw err;
   }
 };
