@@ -26,13 +26,21 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/blog/:slug — public
-router.get('/:slug', async (req: Request, res: Response) => {
+// GET /api/blog/admin/all — admin
+router.get('/admin/all', requireAuth, async (_req: Request, res: Response) => {
   try {
-    const result = await query(
-      'SELECT * FROM blog_posts WHERE slug=$1 AND is_published=true',
-      [req.params.slug]
-    );
+    const result = await query('SELECT * FROM blog_posts ORDER BY created_at DESC').catch(() => ({ rows: [] }));
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.json([]);
+  }
+});
+
+// GET /api/blog/admin/:id — admin: single post
+router.get('/admin/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const result = await query('SELECT * FROM blog_posts WHERE id=$1', [req.params.id]).catch(() => ({ rows: [] }));
     if (result.rows.length === 0) {
       res.status(404).json({ error: 'Post not found' });
       return;
@@ -44,21 +52,13 @@ router.get('/:slug', async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/blog/admin/all — admin
-router.get('/admin/all', requireAuth, async (_req: Request, res: Response) => {
+// GET /api/blog/:slug — public
+router.get('/:slug', async (req: Request, res: Response) => {
   try {
-    const result = await query('SELECT * FROM blog_posts ORDER BY created_at DESC');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// GET /api/blog/admin/:id — admin: single post
-router.get('/admin/:id', requireAuth, async (req: Request, res: Response) => {
-  try {
-    const result = await query('SELECT * FROM blog_posts WHERE id=$1', [req.params.id]);
+    const result = await query(
+      'SELECT * FROM blog_posts WHERE slug=$1 AND is_published=true',
+      [req.params.slug]
+    ).catch(() => ({ rows: [] }));
     if (result.rows.length === 0) {
       res.status(404).json({ error: 'Post not found' });
       return;
@@ -80,11 +80,12 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
       return;
     }
 
+    const pub = is_published ?? true;
     const result = await query(`
       INSERT INTO blog_posts (title, slug, content, excerpt, cover_url, category, is_published, published_at)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *
     `, [title, slug, content, excerpt, cover_url, category || 'update',
-        is_published || false, is_published ? new Date() : null]);
+        pub, pub ? new Date() : null]);
 
     res.status(201).json(result.rows[0]);
   } catch (err: unknown) {

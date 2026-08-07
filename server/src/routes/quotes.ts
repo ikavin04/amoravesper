@@ -89,10 +89,11 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
       await query('UPDATE quotes SET is_pinned = false WHERE is_pinned = true');
     }
 
+    const pub = is_published ?? true;
     const result = await query(`
       INSERT INTO quotes (book_id, text, chapter, type, background_image_url, is_pinned, is_published, sort_order)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *
-    `, [book_id || null, text, chapter, type || 'quote', background_image_url, is_pinned || false, is_published || false, sort_order || 0]);
+    `, [book_id || null, text, chapter, type || 'quote', background_image_url, is_pinned || false, pub, sort_order || 0]);
 
     res.status(201).json(result.rows[0]);
   } catch (err) {

@@ -60,10 +60,11 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
       return;
     }
 
+    const pub = is_published ?? true;
     const result = await query(`
       INSERT INTO gallery_images (title, folder, image_url, alt_text, is_published, sort_order)
       VALUES ($1,$2,$3,$4,$5,$6) RETURNING *
-    `, [title, folder || 'general', image_url, alt_text, is_published || false, sort_order || 0]);
+    `, [title, folder || 'general', image_url, alt_text, pub, sort_order || 0]);
 
     res.status(201).json(result.rows[0]);
   } catch (err) {
