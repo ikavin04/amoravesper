@@ -20,6 +20,7 @@ import settingsRoutes from './routes/settings';
 import searchRoutes from './routes/search';
 import uploadRoutes from './routes/upload';
 import analyticsRoutes from './routes/analytics';
+import suggestionsRoutes from './routes/suggestions';
 
 dotenv.config();
 
@@ -75,8 +76,7 @@ app.use('/api/announcements', announcementsRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/upload', uploadRoutes);
-import suggestionsRoutes from './routes/suggestions';
-
+app.use('/api/analytics', analyticsRoutes);
 app.use('/api/suggestions', suggestionsRoutes);
 
 // ─── 404 Handler ──────────────────────────────────────────────────────────────
