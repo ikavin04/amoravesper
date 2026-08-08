@@ -89,7 +89,6 @@ export default async function AboutPage() {
 
             <FadeIn direction="left" delay={0.2}>
               <div>
-                <p className="text-label mb-6">Biography</p>
                 {settings.about_bio ? (
                   <div
                     className="space-y-4 text-base leading-relaxed mb-10"
@@ -104,17 +103,6 @@ export default async function AboutPage() {
                     Amora Vesper is an author of dark, atmospheric fiction — stories that breathe in the space between silence and shadow. Her writing explores grief, longing, and the strange beauty found in broken things.
                   </p>
                 )}
-
-                {/* Writing Journey */}
-                <div
-                  className="p-6 rounded-sm mb-8"
-                  style={{ background: 'var(--color-ink-muted)', border: '1px solid rgba(255,255,255,0.05)' }}
-                >
-                  <p className="text-label mb-3">The Writing Journey</p>
-                  <p className="text-sm leading-relaxed" style={{ color: 'var(--color-mist-light)' }}>
-                    What started as late-night notes in a worn journal became something larger — a body of work that refuses to be quiet. Every book is written in the hours the world goes still.
-                  </p>
-                </div>
 
                 {/* Favorite Genres */}
                 <div className="mb-8">
